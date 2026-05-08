@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: processor-a
+  namespace: tenant-a
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: processor
+      tenant: a
+  template:
+    metadata:
+      labels:
+        app: processor
+        tenant: a
+    spec:
+      serviceAccountName: sa-a
+      containers:
+      - name: app
+        image: your-app:latest
+        env:
+        - name: TENANT_ID
+          value: "a"
+        - name: AWS_REGION
+          value: "us-east-1"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
